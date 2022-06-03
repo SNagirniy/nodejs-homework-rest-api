@@ -9,10 +9,8 @@ const creationSchema = Joi.object({
       tlds: { allow: ["com", "net"] },
     })
     .required(),
-  phone: Joi.string()
-    .length(10)
-    .pattern(/^[0-9]+$/)
-    .required(),
+  phone: Joi.string().max(10).required(),
+  favorite: Joi.boolean(),
 });
 
 const updateSchema = Joi.object({
@@ -27,4 +25,8 @@ const updateSchema = Joi.object({
     .pattern(/^[0-9]+$/),
 }).min(1);
 
-module.exports = { creationSchema, updateSchema };
+const updateFavouriteSchema = Joi.object({
+  favorite: Joi.boolean().required(),
+});
+
+module.exports = { creationSchema, updateSchema, updateFavouriteSchema };
