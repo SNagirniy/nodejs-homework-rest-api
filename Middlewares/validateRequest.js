@@ -1,10 +1,11 @@
 const createErrorr = require("../routes/api/error");
 
-const validateRequest = (shcema, message) => {
+const validateRequest = (schema, message = null) => {
   return (req, res, next) => {
-    const { error } = shcema.validate(req.body);
+    const { error } = schema.validate(req.body);
     if (error) {
-      next(createErrorr(400, message));
+      const messageSource = message ? message : error.message;
+      next(createErrorr(400, messageSource));
     }
     next();
   };
