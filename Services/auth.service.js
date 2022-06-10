@@ -1,18 +1,53 @@
 const { Users } = require("../models/userSchema");
 const createError = require("../routes/api/error");
-const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+require("dotenv").config();
+const { SECRET_KEY } = process.env;
 
 const registerUser = async (userData) => {
-  const result = await Users.findOne({ email: userData.email });
+  const { email, password } = userData;
+  const result = await Users.findOne({ email });
   if (result) {
     throw createError(409, "Email in use");
   }
-  const { password } = userData;
-  const hashedPassword = await bcrypt.hash(password, 10);
 
-  const user = await Users.create({ ...userData, password: hashedPassword });
+  const newUser = new Users({ email });
+  await newUser.setPassword(password);
+  const user = newUser.save();
 
   return user;
 };
 
-module.exports = { registerUser };
+const loginUser = async ({ email, password }) => {
+  const user = await Users.findOne({ email });
+
+  if (!user || !(await user.comparePassword(password))) {
+    console.log(user.comparePassword(password));
+    throw createError(401, "Email or password is wrong");
+  }
+
+  const payload = {
+    id: user._id,
+  };
+
+  const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "1d" });
+  user.token = token;
+  await user.save();
+
+  return user;
+};
+
+const logoutUser = async (id) => {
+  await Users.findByIdAndUpdate(id, { token: null });
+};
+
+const authenticateUser = async (token) => {
+  try {
+    const { id } = jwt.verify(token, SECRET_KEY);
+    return await Users.findById(id);
+  } catch (error) {
+    return null;
+  }
+};
+
+module.exports = { registerUser, loginUser, authenticateUser, logoutUser };

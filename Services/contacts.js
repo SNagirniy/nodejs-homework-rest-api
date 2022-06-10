@@ -1,7 +1,10 @@
 const { Contacts } = require("../models/contactsShcema");
 
-const listContacts = async () => {
-  return Contacts.find();
+const listContacts = async (id) => {
+  return Contacts.find({ owner: id }).populate(
+    "owner",
+    "_id email subscription"
+  );
 };
 
 const getContactById = async (contactId) => {

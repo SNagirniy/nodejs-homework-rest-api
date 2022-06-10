@@ -42,9 +42,21 @@ const registrationSchema = Joi.object({
   token: Joi.string(),
 });
 
+const loginSchema = Joi.object({
+  password: Joi.string().required(),
+
+  email: Joi.string()
+    .email({
+      minDomainSegments: 2,
+      tlds: { allow: ["com", "net"] },
+    })
+    .required(),
+});
+
 module.exports = {
   creationSchema,
   updateSchema,
   updateFavouriteSchema,
   registrationSchema,
+  loginSchema,
 };
