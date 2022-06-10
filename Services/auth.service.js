@@ -50,4 +50,14 @@ const authenticateUser = async (token) => {
   }
 };
 
-module.exports = { registerUser, loginUser, authenticateUser, logoutUser };
+const updateSubscription = async (id, subscription) => {
+  return Users.findByIdAndUpdate(id, { subscription }, { new: true });
+};
+
+module.exports = {
+  registerUser,
+  loginUser,
+  authenticateUser,
+  logoutUser,
+  updateSubscription,
+};

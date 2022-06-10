@@ -38,4 +38,23 @@ const currentUser = async (req, res, next) => {
   }
 };
 
-module.exports = { registerUser, loginUser, logoutUser, currentUser };
+const updateSubscription = async (req, res, next) => {
+  try {
+    const { _id } = req.user;
+    const { subscription } = req.body;
+    const result = await authService.updateSubscription(_id, subscription);
+    res.json({
+      user: { email: result.email, subscription: result.subscription },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = {
+  registerUser,
+  loginUser,
+  logoutUser,
+  currentUser,
+  updateSubscription,
+};
