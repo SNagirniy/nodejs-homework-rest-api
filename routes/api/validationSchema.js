@@ -29,4 +29,39 @@ const updateFavouriteSchema = Joi.object({
   favorite: Joi.boolean().required(),
 });
 
-module.exports = { creationSchema, updateSchema, updateFavouriteSchema };
+const registrationSchema = Joi.object({
+  password: Joi.string().required(),
+
+  email: Joi.string()
+    .email({
+      minDomainSegments: 2,
+      tlds: { allow: ["com", "net"] },
+    })
+    .required(),
+  subscription: Joi.string(),
+  token: Joi.string(),
+});
+
+const loginSchema = Joi.object({
+  password: Joi.string().required(),
+
+  email: Joi.string()
+    .email({
+      minDomainSegments: 2,
+      tlds: { allow: ["com", "net"] },
+    })
+    .required(),
+});
+
+const subscriptionSchema = Joi.object({
+  subscription: Joi.string().valid("starter", "pro", "business").required(),
+});
+
+module.exports = {
+  creationSchema,
+  updateSchema,
+  updateFavouriteSchema,
+  registrationSchema,
+  loginSchema,
+  subscriptionSchema,
+};

@@ -18,6 +18,7 @@ const {
   updateContact,
   updateStatusContact,
 } = require("../../Controlers/apiControlers");
+const { authorizeUser } = require("../../Middlewares/auth");
 
 router.get("/", listContacts);
 
@@ -39,6 +40,7 @@ router.put(
 
 router.patch(
   "/:contactId/favorite",
+  authorizeUser("business"),
   validateRequest(updateFavouriteSchema, "missing field favorite"),
   updateStatusContact
 );

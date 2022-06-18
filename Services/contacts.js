@@ -1,7 +1,19 @@
 const { Contacts } = require("../models/contactsShcema");
 
-const listContacts = async () => {
-  return Contacts.find();
+const listContacts = async (id, page, limit, favorite) => {
+  const skiped = page * limit - limit;
+  const skip = skiped < 0 ? 0 : skiped;
+
+  const contacts = Contacts.find({ owner: id }, "", {
+    skip,
+    limit: +limit,
+  }).populate("owner", "_id email subscription");
+
+  if (favorite !== null) {
+    contacts.setQuery({ owner: id, favorite });
+  }
+
+  return contacts;
 };
 
 const getContactById = async (contactId) => {
