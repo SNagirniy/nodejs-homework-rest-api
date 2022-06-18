@@ -2,8 +2,10 @@ const authService = require("../Services/auth.service");
 
 const registerUser = async (req, res, next) => {
   try {
-    const { email, subscription } = await authService.registerUser(req.body);
-    res.status(201).json({ user: { email, subscription } });
+    const { email, subscription, avatarURL } = await authService.registerUser(
+      req.body
+    );
+    res.status(201).json({ user: { email, subscription, avatarURL } });
   } catch (error) {
     next(error);
   }
