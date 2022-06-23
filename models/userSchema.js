@@ -1,6 +1,7 @@
 const { Schema, model } = require("mongoose");
 const bcrypt = require("bcryptjs");
 const gravatar = require("gravatar");
+const { v4 } = require("uuid");
 
 const userSchema = new Schema(
   {
@@ -30,6 +31,17 @@ const userSchema = new Schema(
           s: "250",
         });
       },
+    },
+    verify: {
+      type: Boolean,
+      default: false,
+    },
+    verificationToken: {
+      type: String,
+      default: function () {
+        return v4();
+      },
+      required: [true, "Verify token is required"],
     },
   },
   { timestamps: true, versionKey: false }

@@ -1,9 +1,12 @@
 const { Users } = require("../models/userSchema");
-const path = require("path");
 
-const updateUser = async (id, avatarURL) => {
-  const user = Users.findByIdAndUpdate(id, { avatarURL }, { new: true });
+const updateUser = async (id, data) => {
+  const user = Users.findByIdAndUpdate(id, data, { new: true });
   return user;
 };
 
-module.exports = { updateUser };
+const findUser = async (filters) => {
+  return Users.findOne(filters);
+};
+
+module.exports = { updateUser, findUser };
