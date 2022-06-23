@@ -1,20 +1,23 @@
 const authService = require("../Services/auth.service");
 
-const registerUser = async (req, res, next) => {
+const Register = async (req, res, next) => {
   try {
     const { email, subscription } = await authService.registerUser(req.body);
-    res.status(201).json({ user: { email, subscription } });
+    return res.status(201).json({ code: 201, user: { email, subscription } });
   } catch (error) {
     next(error);
   }
 };
 
-const loginUser = async (req, res, next) => {
+const Login = async (req, res, next) => {
   try {
-    const { token, email, subscription } = await authService.loginUser(
-      req.body
-    );
-    res.json({ token, user: { email, subscription } });
+    const { token, email, subscription, avatarURL } =
+      await authService.loginUser(req.body);
+    return res.json({
+      code: 200,
+      token,
+      user: { email, subscription, avatarURL },
+    });
   } catch (error) {
     next(error);
   }
@@ -52,8 +55,8 @@ const updateSubscription = async (req, res, next) => {
 };
 
 module.exports = {
-  registerUser,
-  loginUser,
+  Register,
+  Login,
   logoutUser,
   currentUser,
   updateSubscription,

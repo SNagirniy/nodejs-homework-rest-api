@@ -7,18 +7,26 @@ const {
   subscriptionSchema,
 } = require("./validationSchema");
 const {
-  registerUser,
-  loginUser,
+  Register,
+  Login,
   logoutUser,
   currentUser,
   updateSubscription,
 } = require("../../Controlers/auth");
 const { auth } = require("../../Middlewares/auth");
+const { upload } = require("../../Middlewares/upload");
+const { updateAvatar } = require("../../Controlers/avatar");
 
-router.post("/signup", validateRequest(registrationSchema), registerUser);
-router.post("/login", validateRequest(loginSchema), loginUser);
+router.post("/signup", validateRequest(registrationSchema), Register);
+router.post("/login", validateRequest(loginSchema), Login);
 router.post("/logout", auth, logoutUser);
 router.get("/current", auth, currentUser);
-router.patch("/",auth, validateRequest(subscriptionSchema), updateSubscription);
+router.patch(
+  "/",
+  auth,
+  validateRequest(subscriptionSchema),
+  updateSubscription
+);
+router.patch("/avatars", auth, upload.single("avatar"), updateAvatar);
 
 module.exports = router;
