@@ -20,14 +20,12 @@ const sendEmail = async (userEmail, code) => {
     from: EMAIL,
     to: userEmail,
     subject: "Confirm your email",
-    html: `<h4>Click on this link to confirm registration: <a href=${link}>${link}</a></h4>`,
+    html: `<h4>Click on this link to confirm registration: ${link}</h4>`,
   };
 
   try {
-    const result = await transporter.sendMail(emailOptions);
-    console.log(result);
+    await transporter.sendMail(emailOptions);
   } catch (error) {
-    console.log(error);
     throw error;
   }
 };

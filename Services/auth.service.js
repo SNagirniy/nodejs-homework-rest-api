@@ -21,8 +21,11 @@ const registerUser = async (userData) => {
 const loginUser = async ({ email, password }) => {
   const user = await Users.findOne({ email });
 
+  if (user && !user.verify) {
+    throw createError(401, "Please confirm your email");
+  }
+
   if (!user || !(await user.comparePassword(password))) {
-    console.log(user.comparePassword(password));
     throw createError(401, "Email or password is wrong");
   }
 

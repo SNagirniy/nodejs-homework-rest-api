@@ -41,7 +41,6 @@ const userSchema = new Schema(
       default: function () {
         return v4();
       },
-      required: [true, "Verify token is required"],
     },
   },
   { timestamps: true, versionKey: false }
