@@ -57,6 +57,15 @@ const subscriptionSchema = Joi.object({
   subscription: Joi.string().valid("starter", "pro", "business").required(),
 });
 
+const resendSchema = Joi.object({
+  email: Joi.string()
+    .email({
+      minDomainSegments: 2,
+      tlds: { allow: ["com", "net"] },
+    })
+    .required(),
+});
+
 module.exports = {
   creationSchema,
   updateSchema,
@@ -64,4 +73,5 @@ module.exports = {
   registrationSchema,
   loginSchema,
   subscriptionSchema,
+  resendSchema,
 };

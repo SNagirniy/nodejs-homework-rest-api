@@ -6,7 +6,7 @@ const updateAvatar = async (req, res, next) => {
     const { _id } = req.user;
 
     const imageURL = await uploadImage(_id, req.file);
-    const { avatarURL } = await updateUser(_id, imageURL);
+    const { avatarURL } = await updateUser(_id, { imageURL });
     res.json([avatarURL]);
   } catch (e) {
     next(e);
