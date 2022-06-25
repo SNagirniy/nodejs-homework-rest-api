@@ -12,7 +12,7 @@ const config = {
 };
 
 const transporter = nodemailer.createTransport(config);
-const BASE_URL = `localhost:${PORT}/api`;
+const BASE_URL = `http://localhost:${PORT}/api`;
 
 const sendEmail = async (userEmail, code) => {
   const link = `${BASE_URL}/users/verify/${code}`;

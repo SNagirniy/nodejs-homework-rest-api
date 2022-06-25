@@ -1,5 +1,5 @@
 const authService = require("../Services/auth.service");
-const { sendEmail } = require("../Services/email.service");
+const emailService = require("../Services/email.service");
 const { findUser, updateUser } = require("../Services/userService");
 const createError = require("../routes/api/error");
 
@@ -7,7 +7,7 @@ const Register = async (req, res, next) => {
   try {
     const { email, subscription, verificationToken } =
       await authService.registerUser(req.body);
-    await sendEmail(email, verificationToken);
+    await emailService.sendEmail(email, verificationToken);
     return res.status(201).json({ code: 201, user: { email, subscription } });
   } catch (error) {
     next(error);
@@ -39,7 +39,7 @@ const resendEmail = async (req, res, next) => {
     if (user.verify) {
       throw createError(400, "Verification has already been passed");
     }
-    await sendEmail(user.email, user.verificationToken);
+    await emailService.sendEmail(user.email, user.verificationToken);
     res.status(200).json({ message: "Verification email sent" });
   } catch (error) {
     next(error);
